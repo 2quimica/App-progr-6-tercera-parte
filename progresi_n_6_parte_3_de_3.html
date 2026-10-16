@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progresión 6 — Parte 3 de 3: Efecto Fotoeléctrico y Radiación</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #1e3a8a;
+            --primary-light: #2563eb;
+            --secondary: #0d9488;
+            --accent: #d97706;
+            --border: #cbd5e1;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 30px;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        .app-header {
+            background: var(--card-bg);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border: 1px solid var(--border);
+        }
+
+        .app-title-mini {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .app-subtitle-mini {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .progress-container {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .alert-banner {
+            background: #fffbeeb0;
+            border-left: 4px solid var(--accent);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #92400e;
+            margin-bottom: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-light);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.2s, transform 0.1s;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn:disabled {
+            background-color: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .reading-text {
+            font-size: 0.95rem;
+            color: #334155;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .reading-text strong {
+            color: var(--primary);
+        }
+
+        .key-concept {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--primary-light);
+            padding: 10px 12px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.88rem;
+            margin: 12px 0;
+            color: #1e40af;
+        }
+
+        .visual-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin: 12px 0;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .visual-box svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary-light);
+            background-color: #eff6ff;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background-color: var(--success-bg);
+            color: #14532d;
+            font-weight: 700;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--error);
+            background-color: var(--error-bg);
+            color: #7f1d1d;
+        }
+
+        .hint-box {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            display: none;
+        }
+
+        .hint-box.active {
+            display: block;
+        }
+
+        .hint-box.info {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .hint-box.success {
+            background-color: var(--success-bg);
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .hint-box.error {
+            background-color: var(--error-bg);
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            min-height: 48px;
+        }
+
+        .chip {
+            padding: 6px 12px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .chip.selected {
+            background: var(--primary-light);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chip.used {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+
+        .map-slot {
+            background: #ffffff;
+            border: 2px dashed #94a3b8;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            min-height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.88rem;
+        }
+
+        .map-slot.filled {
+            border-style: solid;
+            border-color: var(--primary-light);
+            background: #f0f9ff;
+        }
+
+        .reorder-list {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .reorder-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+        }
+
+        .reorder-btns {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-mini {
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .quiz-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .quiz-nav-item {
+            padding: 8px;
+            text-align: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .quiz-nav-item.active {
+            border-color: var(--primary);
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .quiz-nav-item.answered {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .evidence-card {
+            background: #ffffff;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text-main);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .evidence-header {
+            text-align: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .evidence-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px linear-gradient(to right, #ccc, transparent);
+            font-size: 0.88rem;
+        }
+
+        .evidence-label {
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .evidence-value {
+            font-weight: 800;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        .score-box-large {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin: 12px 0;
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .reflection-preview {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: 6px;
+            word-break: break-word;
+        }
+
+        .whatsapp-notice {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #14532d;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 14px;
+        }
+
+        /* Custom Modal Notification (Replaces Browser alert) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-body {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 8px; }
+            .card { padding: 14px; }
+            .btn { padding: 12px 16px; font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Sticky -->
+        <header class="app-header">
+            <div class="app-title-mini">PROGRESIÓN 6 — PARTE 3 DE 3</div>
+            <div class="app-subtitle-mini" id="header-step-title">Cargando...</div>
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Mounting Point -->
+        <main id="app-content"></main>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div class="modal-overlay" id="custom-alert-modal">
+        <div class="modal-card">
+            <div class="modal-title" id="custom-alert-title">Aviso</div>
+            <div class="modal-body" id="custom-alert-msg">Mensaje de notificación</div>
+            <button class="btn" onclick="closeModalAlert()">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'mccems_p6_parte3_state_v1';
+
+        const STEPS = [
+            'REGISTER',
+            'LECTURA_1',
+            'LECTURA_2',
+            'LECTURA_3',
+            'CASO_PRAGTICO',
+            'QUIZ',
+            'REFLECTION',
+            'EVIDENCE'
+        ];
+
+        const QUIZ_DATA = [
+            {
+                q: "1. ¿Qué demostró el Efecto Fotoeléctrico respecto a la naturaleza de la luz?",
+                options: [
+                    "A) La luz es únicamente una onda continua sin partículas.",
+                    "B) La luz interactúa con la materia transfiriendo energía en paquetes discretos (fotones).",
+                    "C) La luz no transmite ninguna forma de energía a los electrones.",
+                    "D) Los electrones absorben energía sin importar la frecuencia de la luz."
+                ],
+                correct: 1,
+                exp: "Albert Einstein demostró que el efecto fotoeléctrico solo se explica si la luz se comporta como un flujo de cuantos de energía (fotones)."
+            },
+            {
+                q: "2. En el efecto fotoeléctrico, si la frecuencia de la luz incidente es MENOR que la frecuencia de umbral ($f_0$):",
+                options: [
+                    "A) Se emiten electrones a muy baja velocidad.",
+                    "B) Se emiten muchísimos electrones si la luz es muy brillante.",
+                    "C) No se emite ningún electrón, independientemente de la intensidad de la luz.",
+                    "D) El metal se derrite inmediatamente por la energía almacenada."
+                ],
+                correct: 2,
+                exp: "Si $f < f_0$, el fotón no tiene suficiente energía individual para vencer la función de trabajo del metal, por lo que NO hay emisión fotoeléctrica."
+            },
+            {
+                q: "3. ¿Cuál es el principio básico de funcionamiento de una célula fotovoltaica (panel solar)?",
+                options: [
+                    "A) Quemar silicio para liberar vapor y mover una turbina eléctrica.",
+                    "B) Convertir fotones de la luz solar directamente en corriente eléctrica mediante un semiconductor.",
+                    "C) Absorber calor térmico para calentar tubos de agua tibia.",
+                    "D) Reflejar la luz del Sol hacia un espejo central que genera ondas de radio."
+                ],
+                correct: 1,
+                exp: "Las células fotovoltaicas usan semiconductores (como el silicio) para liberar electrones cuando reciben fotones, generando corriente continua (CC)."
+            },
+            {
+                q: "4. En una célula solar, ¿cuál es la función de la unión p-n en el semiconductor?",
+                options: [
+                    "A) Evitar que el panel solar se caliente demasiado.",
+                    "B) Crear un campo eléctrico interno que dirija los electrones liberados en un solo sentido.",
+                    "C) Filtrar el agua de lluvia para evitar corto circuitos.",
+                    "D) Cambiar el color de los fotones incidentes a luz visible."
+                ],
+                correct: 1,
+                exp: "La unión p-n genera una barrera con campo eléctrico que obliga a los electrones libres a fluir en una dirección fija, creando la corriente eléctrica."
+            },
+            {
+                q: "5. ¿Qué caracteriza a la Radiación IONIZANTE?",
+                options: [
+                    "A) Posee alta energía y frecuencia suficiente para arrancar electrones de los átomos y alterar moléculas de ADN.",
+                    "B) Es completamente inofensiva y se usa en la transmisión de radio AM y FM.",
+                    "C) Solamente produce calentamiento superficial en la piel.",
+                    "D) Viaja a una velocidad mucho menor que la velocidad de la luz."
+                ],
+                correct: 0,
+                exp: "La radiación ionizante (rayos UV lejanos, rayos X, rayos gamma) tiene fotones tan energéticos que rompen enlaces químicos y pueden modificar el ADN."
+            },
+            {
+                q: "6. ¿Cuál de los siguientes ejemplos corresponde a una Radiación NO IONIZANTE?",
+                options: [
+                    "A) Rayos Gamma emitidos por elementos radiactivos.",
+                    "B) Rayos X utilizados en las radiografías médicas.",
+                    "C) Ondas de radio, Wi-Fi y microondas.",
+                    "D) Radiación cósmica que proviene del espacio exterior."
+                ],
+                correct: 2,
+                exp: "Las ondas de radio, microondas, infrarrojos y luz visible son radiación no ionizante; sus fotones no tienen energía para ionizar átomos."
+            },
+            {
+                q: "7. ¿Por qué las ondas de celular o radio NO causan alteraciones genéticas directas en el ADN humano?",
+                options: [
+                    "A) Porque viajan más rápido que la luz y rebotan en la piel.",
+                    "B) Porque son radiación no ionizante cuya energía por fotón es sumamente baja e incapaz de romper enlaces químicos.",
+                    "C) Porque el cuerpo humano repele magnéticamente las ondas electromagnéticas.",
+                    "D) Porque las ondas de celular se convierten en agua al tocar el cuerpo."
+                ],
+                correct: 1,
+                exp: "Al ser no ionizantes, los fotones de las telecomunicaciones no tienen la frecuencia ni la energía cuántica requerida para arrancar electrones o alterar el ADN."
+            },
+            {
+                q: "8. Un paciente requiere una radiografía ósea en la clínica. ¿Qué tipo de radiación se utiliza y qué cuidado se aplica?",
+                options: [
+                    "A) Radiación no ionizante; no requiere ningún tipo de cuidado especial.",
+                    "B) Radiación ionizante (Rayos X); se aplica solo el tiempo mínimo necesario con blindaje de plomo en zonas sensibles.",
+                    "C) Microondas de alta potencia; requiere hidratarse con abundante agua.",
+                    "D) Luz infrarroja; se debe usar protector solar de amplio espectro."
+                ],
+                correct: 1,
+                exp: "Los Rayos X son radiación ionizante de utilidad médica, por lo cual se controla estrictamente el tiempo de exposición y se usa protección."
+            },
+            {
+                q: "9. ¿Cómo influye la energía de radiación solar fotovoltaica durante una contingencia de emergencia (como un huracán en Tuxpan)?",
+                options: [
+                    "A) No sirve porque la luz del sol se destruye durante la tormenta.",
+                    "B) Proporciona energía eléctrica autónoma y sustentable para recargar equipos de comunicación sin depender de la red eléctrica dañada.",
+                    "C) Genera radiación ionizante peligrosa para las viviendas inundadas.",
+                    "D) Aumenta la intensidad de los vientos tropicales en la zona."
+                ],
+                correct: 1,
+                exp: "Los sistemas fotovoltaicos portátiles o residenciales permiten alimentar iluminación y telecomunicaciones vitales en casos de desastre natural."
+            },
+            {
+                q: "10. ¿Cuál es la diferencia fundamental entre el efecto térmico del sol y la producción fotoeléctrica en un panel?",
+                options: [
+                    "A) El efecto térmico agita las moléculas produciendo calor; el efecto fotoeléctrico libera electrones al absorber quanta de luz.",
+                    "B) El efecto fotoeléctrico requiere fuego directo; el efecto térmico funciona de noche.",
+                    "C) No existe ninguna diferencia; ambos producen exactamente la misma corriente continua.",
+                    "D) El efecto térmico destruye los electrones y el fotoeléctrico los crea desde cero."
+                ],
+                correct: 0,
+                exp: "El calentamiento es transferencia de energía térmica no ionizante; el efecto fotoeléctrico es la absorción discreta de fotones para la liberación de cargas eléctricas."
+            }
+        ];
+
+        let state = {
+            studentName: '',
+            studentGroup: '',
+            currentStep: 'REGISTER',
+            progressPct: 0,
+            check1Selected: null,
+            check1Submitted: false,
+            reorderList: [
+                { id: 3, text: "Los electrones liberados son empujados por el campo p-n creando una corriente eléctrica continua (CC)." },
+                { id: 1, text: "Los fotones de la luz solar inciden sobre la superficie del semiconductor (Silicio)." },
+                { id: 2, text: "La energía de los fotones es absorbida, liberando electrones de sus átomos." }
+            ],
+            reorderCorrect: false,
+            mapSlots: { slot1: null, slot2: null, slot3: null },
+            mapCorrect: false,
+            caseText: '',
+            quizCurrentIndex: 0,
+            quizAnswers: Array(10).fill(null),
+            quizSubmitted: false,
+            quizScore: 0,
+            reflectionText: '',
+            startTime: new Date().toISOString(),
+            endTime: null
+        };
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn('LocalStorage error:', e);
+            }
+        }
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    state = Object.assign({}, state, JSON.parse(saved));
+                }
+            } catch (e) {
+                console.warn('LocalStorage reload error:', e);
+            }
+        }
+
+        function showModalAlert(msg, title = "Aviso") {
+            document.getElementById('custom-alert-title').textContent = title;
+            document.getElementById('custom-alert-msg').textContent = msg;
+            document.getElementById('custom-alert-modal').style.display = 'flex';
+        }
+
+        function closeModalAlert() {
+            document.getElementById('custom-alert-modal').style.display = 'none';
+        }
+
+        function updateProgress(pct) {
+            state.progressPct = pct;
+            document.getElementById('progress-bar').style.width = pct + '%';
+            document.getElementById('progress-text').textContent = pct + '%';
+        }
+
+        function setStep(stepName, pct) {
+            state.currentStep = stepName;
+            updateProgress(pct);
+            saveState();
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            const container = document.getElementById('app-content');
+            updateProgress(state.progressPct);
+
+            switch (state.currentStep) {
+                case 'REGISTER':
+                    container.innerHTML = renderRegisterScreen();
+                    break;
+                case 'LECTURA_1':
+                    container.innerHTML = renderLectura1Screen();
+                    break;
+                case 'LECTURA_2':
+                    container.innerHTML = renderLectura2Screen();
+                    break;
+                case 'LECTURA_3':
+                    container.innerHTML = renderLectura3Screen();
+                    break;
+                case 'CASO_PRAGTICO':
+                    container.innerHTML = renderCasoPracticoScreen();
+                    break;
+                case 'QUIZ':
+                    container.innerHTML = renderQuizScreen();
+                    break;
+                case 'REFLECTION':
+                    container.innerHTML = renderReflectionScreen();
+                    break;
+                case 'EVIDENCE':
+                    container.innerHTML = renderEvidenceScreen();
+                    break;
+                default:
+                    container.innerHTML = renderRegisterScreen();
+            }
+        }
+
+        function renderRegisterScreen() {
+            document.getElementById('header-step-title').textContent = "Paso 1: Identificación del Estudiante";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        📌 Bienvenida y Registro
+                    </div>
+                    <div class="card-subtitle">
+                        Módulo Autónomo de Aprendizaje — Física II (MCCEMS)
+                    </div>
+
+                    <div class="alert-banner">
+                        🌧️ <strong>Estrategia de Contingencia Tuxpan:</strong> Este recurso educativo funciona 100% offline sin necesidad de conexión a internet.
+                    </div>
+
+                    <p class="reading-text">
+                        En esta tercera y última parte de la <strong>Progresión 6</strong>, explorarás la manifestación cuántica de la luz mediante el <strong>Efecto Fotoeléctrico</strong>, la tecnología de las <strong>Células Fotovoltaicas</strong> y la distinción fundamental entre <strong>Radiación Ionizante y No Ionizante</strong>.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label" for="inp-name">Nombre Completo del Estudiante *</label>
+                        <input type="text" id="inp-name" class="form-input" placeholder="Ej. María Guadalupe Pérez" value="${escapeHtml(state.studentName)}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="inp-group">Grupo y Turno *</label>
+                        <input type="text" id="inp-group" class="form-input" placeholder="Ej. 4°A Matutino" value="${escapeHtml(state.studentGroup)}">
+                    </div>
+
+                    <button class="btn" onclick="submitRegister()">
+                        Comenzar Secuencia Didáctica 🚀
+                    </button>
+                </div>
+            `;
+        }
+
+        function submitRegister() {
+            const name = (document.getElementById('inp-name').value || '').trim();
+            const group = (document.getElementById('inp-group').value || '').trim();
+
+            if (!name || !group) {
+                showModalAlert("Por favor ingresa tu nombre completo y grupo para poder continuar.");
+                return;
+            }
+
+            state.studentName = name;
+            state.studentGroup = group;
+            setStep('LECTURA_1', 15);
+        }
+
+        function renderLectura1Screen() {
+            document.getElementById('header-step-title').textContent = "Paso 2: El Efecto Fotoeléctrico";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        ⚡ 1. El Efecto Fotoeléctrico
+                    </div>
+
+                    <p class="reading-text">
+                        A finales del siglo XIX, los físicos descubrieron que al iluminar ciertas placas metálicas con luz de alta frecuencia (como luz ultravioleta), el metal emitía electrones. Este fenómeno se conoce como <strong>Efecto Fotoeléctrico</strong>.
+                    </p>
+
+                    <!-- SVG Diagram: Efecto Fotoelectrico -->
+                    <div class="visual-box">
+                        <svg viewBox="0 0 400 180" width="100%" height="160">
+                            <!-- Placa de Metal -->
+                            <rect x="220" y="30" width="25" height="120" rx="4" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+                            <text x="232" y="165" font-size="10" font-weight="bold" text-anchor="middle" fill="#334155">Placa Metálica</text>
+                            
+                            <!-- Fotones Incidentes -->
+                            <path d="M 30 50 Q 60 30 90 50 T 150 50" fill="none" stroke="#eab308" stroke-width="3"/>
+                            <polygon points="155,50 145,45 145,55" fill="#eab308"/>
+                            <text x="70" y="35" font-size="11" font-weight="bold" fill="#d97706">Fotón Incidente (E = h·f)</text>
+
+                            <!-- Electron arrancado -->
+                            <circle cx="270" cy="70" r="8" fill="#2563eb"/>
+                            <text x="270" y="73" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">-</text>
+                            <path d="M 280 70 L 340 70" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,2"/>
+                            <polygon points="345,70 337,66 337,74" fill="#2563eb"/>
+                            <text x="310" y="60" font-size="10" font-weight="bold" fill="#1e40af">Electrón libre</text>
+                        </svg>
+                        <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
+                            Representación del fotón incidiendo en el metal y expulsando un electrón.
+                        </div>
+                    </div>
+
+                    <p class="reading-text">
+                        En 1905, <strong>Albert Einstein</strong> explicó este fenómeno postulando que la luz no solo es una onda, sino que está formada por paquetes discretos de energía llamados <strong>fotones</strong> ($E = h\cdot f$). 
+                    </p>
+
+                    <div class="key-concept">
+                        💡 <strong>Frecuencia de Umbral ($f_0$):</strong> Para expulsar un electrón, el fotón individual debe tener una frecuencia mínima ($f_0$). Si la frecuencia de la luz es menor que $f_0$, <strong>no se emitirá ningún electrón</strong>, sin importar qué tan intensa o brillante sea la luz.
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+
+                    <div style="font-weight: 700; margin-bottom: 8px;">
+                        🧠 Comprueba tu comprensión:
+                    </div>
+                    <p style="font-size: 0.9rem; margin-bottom: 10px;">
+                        Si iluminamos un metal con luz roja de muy baja frecuencia pero sumamente brillante e intensa, ¿qué ocurrirá con la emisión fotoeléctrica?
+                    </p>
+
+                    <div>
+                        <button class="option-btn ${state.check1Selected === 0 ? 'selected' : ''} ${state.check1Submitted ? (0 === 1 ? 'correct' : (state.check1Selected === 0 ? 'incorrect' : '')) : ''}" onclick="selectCheck1(0)">
+                            A) Saldrán millones de electrones con mucha velocidad.
+                        </button>
+                        <button class="option-btn ${state.check1Selected === 1 ? 'selected' : ''} ${state.check1Submitted ? (1 === 1 ? 'correct' : (state.check1Selected === 1 ? 'incorrect' : '')) : ''}" onclick="selectCheck1(1)">
+                            B) No saldrá ningún electrón porque la energía de cada fotón es inferior a la frecuencia de umbral.
+                        </button>
+                        <button class="option-btn ${state.check1Selected === 2 ? 'selected' : ''} ${state.check1Submitted ? (2 === 1 ? 'correct' : (state.check1Selected === 2 ? 'incorrect' : '')) : ''}" onclick="selectCheck1(2)">
+                            C) El metal absorberá todos los fotones y se transformará en silicio.
+                        </button>
+                    </div>
+
+                    ${state.check1Submitted ? `
+                        <div class="hint-box active ${state.check1Selected === 1 ? 'success' : 'error'}">
+                            ${state.check1Selected === 1 
+                                ? '🎉 <strong>¡Correcto!</strong> La intensidad solo aumenta la cantidad de fotones, pero si cada fotón individual no alcanza la frecuencia de umbral ($f_0$), no puede liberar electrones.' 
+                                : '❌ <strong>Revisa la lectura:</strong> Recuerda que la liberación fotoeléctrica depende de la frecuencia individual del fotón, no de la intensidad de la luz.'}
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top: 16px;">
+                        ${!state.check1Submitted ? `
+                            <button class="btn" onclick="verifyCheck1()">Verificar Respuesta</button>
+                        ` : `
+                            <button class="btn btn-secondary" onclick="setStep('LECTURA_2', 35)">Avanzar al Paso 3 ➡️</button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectCheck1(idx) {
+            if (state.check1Submitted) return;
+            state.check1Selected = idx;
+            render();
+        }
+
+        function verifyCheck1() {
+            if (state.check1Selected === null) {
+                showModalAlert("Selecciona una opción antes de verificar.");
+                return;
+            }
+            state.check1Submitted = true;
+            saveState();
+            render();
+        }
+
+        function renderLectura2Screen() {
+            document.getElementById('header-step-title').textContent = "Paso 3: Células Fotovoltaicas";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        ☀️ 2. Células Fotovoltaicas (Paneles Solares)
+                    </div>
+
+                    <p class="reading-text">
+                        Una <strong>célula fotovoltaica</strong> es un dispositivo semiconductor (generalmente fabricado de silicio) diseñado para aprovechar el efecto fotoeléctrico y convertir la energía de la luz solar directamente en electricidad de corriente continua (CC).
+                    </p>
+
+                    <div class="key-concept">
+                        🔬 <strong>Estructura semiconductora:</strong> Las células solares constan de dos capas con impurezas agregadas: la capa tipo <strong>N</strong> (con exceso de electrones) y la capa tipo <strong>P</strong> (con déficit de electrones o "huecos"). La unión entre ambas crea un campo eléctrico interno.
+                    </div>
+
+                    <!-- SVG Diagram: Panel Solar / Celula Fotovoltaica -->
+                    <div class="visual-box">
+                        <svg viewBox="0 0 380 160" width="100%" height="150">
+                            <!-- Luz Solar -->
+                            <line x1="60" y1="10" x2="100" y2="45" stroke="#f59e0b" stroke-width="3" stroke-dasharray="3,3"/>
+                            <line x1="100" y1="10" x2="130" y2="45" stroke="#f59e0b" stroke-width="3" stroke-dasharray="3,3"/>
+                            <text x="70" y="20" font-size="10" font-weight="bold" fill="#d97706">Fotones Solares</text>
+
+                            <!-- Capa N -->
+                            <rect x="80" y="50" width="220" height="30" rx="2" fill="#93c5fd" stroke="#2563eb"/>
+                            <text x="190" y="70" font-size="11" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Capa Tipo N (Electrones)</text>
+
+                            <!-- Unión P-N -->
+                            <line x1="80" y1="80" x2="300" y2="80" stroke="#0d9488" stroke-width="3"/>
+
+                            <!-- Capa P -->
+                            <rect x="80" y="83" width="220" height="30" rx="2" fill="#fbcfe8" stroke="#db2777"/>
+                            <text x="190" y="103" font-size="11" font-weight="bold" fill="#831843" text-anchor="middle">Capa Tipo P (Huecos)</text>
+
+                            <!-- Circuito externo -->
+                            <path d="M 80 65 L 40 65 L 40 130 L 320 130 L 320 98 L 300 98" fill="none" stroke="#475569" stroke-width="2"/>
+                            <!-- Foco / Carga -->
+                            <circle cx="180" cy="130" r="12" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                            <text x="180" y="134" font-size="10" font-weight="bold" text-anchor="middle">💡</text>
+                        </svg>
+                        <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">
+                            Flujo continuo de electrones impulsado por fotones a través del circuito.
+                        </div>
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+
+                    <div style="font-weight: 700; margin-bottom: 8px;">
+                        🧩 Actividad: Ordena la Secuencia Fotovoltaica
+                    </div>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 10px;">
+                        Usa las flechas (⬆ / ⬇) para ordenar correctamente los pasos en la generación de energía solar:
+                    </p>
+
+                    <ul class="reorder-list">
+                        ${state.reorderList.map((item, idx) => `
+                            <li class="reorder-item">
+                                <span style="flex:1; padding-right:8px;">${item.text}</span>
+                                <div class="reorder-btns">
+                                    <button class="btn-mini" onclick="moveReorder(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>⬆</button>
+                                    <button class="btn-mini" onclick="moveReorder(${idx}, 1)" ${idx === state.reorderList.length - 1 ? 'disabled' : ''}>⬇</button>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+
+                    ${state.reorderCorrect ? `
+                        <div class="hint-box active success">
+                            🎉 <strong>¡Secuencia Correcta!</strong> Los fotones inciden, liberan electrones y la unión p-n canaliza el flujo continuo de electricidad.
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top: 14px;">
+                        <button class="btn btn-outline" onclick="checkReorderSequence()">
+                            Verificar Orden de Pasos
+                        </button>
+                        ${state.reorderCorrect ? `
+                            <button class="btn btn-secondary" style="margin-top:8px;" onclick="setStep('LECTURA_3', 50)">
+                                Avanzar al Paso 4 ➡️
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function moveReorder(idx, dir) {
+            const newIdx = idx + dir;
+            if (newIdx < 0 || newIdx >= state.reorderList.length) return;
+            const temp = state.reorderList[idx];
+            state.reorderList[idx] = state.reorderList[newIdx];
+            state.reorderList[newIdx] = temp;
+            render();
+        }
+
+        function checkReorderSequence() {
+            const isOrdered = state.reorderList[0].id === 1 && state.reorderList[1].id === 2 && state.reorderList[2].id === 3;
+            if (isOrdered) {
+                state.reorderCorrect = true;
+                saveState();
+                render();
+            } else {
+                showModalAlert("El orden aún no es el correcto. Recuerda: 1° Incidencia de fotones, 2° Absorción y liberación de electrones, 3° Conducción de corriente en la unión p-n.");
+            }
+        }
+
+        function renderLectura3Screen() {
+            document.getElementById('header-step-title').textContent = "Paso 4: Tipos de Radiación";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        ☢️ 3. Radiación Ionizante vs. No Ionizante
+                    </div>
+
+                    <p class="reading-text">
+                        En el espectro electromagnético, las ondas transportan energía proportional a su frecuencia ($E = h\cdot f$). Dependiendo de esta energía, la radiación se clasifica en dos grandes categorías con efectos biológicos muy distintos:
+                    </p>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin: 12px 0;">
+                        <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:10px; border-radius:8px; font-size:0.82rem;">
+                            <strong style="color:#166534; display:block; margin-bottom:4px;">🟢 NO IONIZANTE</strong>
+                            • Baja frecuencia/energía.<br>
+                            • <strong>NO</strong> arranca electrones ni altera el ADN.<br>
+                            • Ejemplos: Radio AM/FM, Wi-Fi, Celulares, Microondas, Luz Visible.
+                        </div>
+                        <div style="background:#fef2f2; border:1px solid #fecaca; padding:10px; border-radius:8px; font-size:0.82rem;">
+                            <strong style="color:#991b1b; display:block; margin-bottom:4px;">🔴 IONIZANTE</strong>
+                            • Alta frecuencia/energía.<br>
+                            • <strong>Sí</strong> arranca electrones y rompe enlaces en el ADN.<br>
+                            • Ejemplos: Rayos UV lejanos, Rayos X, Rayos Gamma.
+                        </div>
+                    </div>
+
+                    <div class="key-concept">
+                        🛡️ <strong>Aplicación Médica y Tecnológica:</strong> La radiación ionizante (como los Rayos X) es indispensable en medicina diagnóstica, pero requiere protección de plomo y tiempo de exposición controlado. La radiación no ionizante (como las antenas de telefonía) transporta información sin modificar las moléculas biológicas.
+                    </div>
+
+                    <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+
+                    <div style="font-weight: 700; margin-bottom: 8px;">
+                        🎯 Clasificación Interactiva: Relaciona la Radiación
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+                        Toca un concepto del banco y luego toca el casillero correspondiente:
+                    </p>
+
+                    <div class="word-bank">
+                        <div class="chip ${getSelectedChipCls('Rayos X')}" onclick="selectChip('Rayos X')">Rayos X</div>
+                        <div class="chip ${getSelectedChipCls('Ondas de Wi-Fi')}" onclick="selectChip('Ondas de Wi-Fi')">Ondas de Wi-Fi</div>
+                        <div class="chip ${getSelectedChipCls('Rayos Gamma')}" onclick="selectChip('Rayos Gamma')">Rayos Gamma</div>
+                    </div>
+
+                    <div class="map-slot ${state.mapSlots.slot1 ? 'filled' : ''}" onclick="assignSlot('slot1')">
+                        <span>1. Utilizados en radiografías médicas (Ionizante):</span>
+                        <strong>${state.mapSlots.slot1 || '[ Tocar para asignar ]'}</strong>
+                    </div>
+
+                    <div class="map-slot ${state.mapSlots.slot2 ? 'filled' : ''}" onclick="assignSlot('slot2')">
+                        <span>2. Redes inalámbricas de telecomunicación (No Ionizante):</span>
+                        <strong>${state.mapSlots.slot2 || '[ Tocar para asignar ]'}</strong>
+                    </div>
+
+                    <div class="map-slot ${state.mapSlots.slot3 ? 'filled' : ''}" onclick="assignSlot('slot3')">
+                        <span>3. Radiación cósmica y nuclear de alta energía (Ionizante):</span>
+                        <strong>${state.mapSlots.slot3 || '[ Tocar para asignar ]'}</strong>
+                    </div>
+
+                    ${state.mapCorrect ? `
+                        <div class="hint-box active success">
+                            🎉 <strong>¡Excelente clasificación!</strong> Has identificado con claridad las fuentes ionizantes frente a las telecomunicaciones no ionizantes.
+                        </div>
+                    ` : ''}
+
+                    <div style="margin-top: 14px;">
+                        <button class="btn btn-outline" onclick="verifyConceptMap()">Verificar Clasificación</button>
+                        ${state.mapCorrect ? `
+                            <button class="btn btn-secondary" style="margin-top:8px;" onclick="setStep('CASO_PRAGTICO', 65)">
+                                Avanzar a Análisis de Caso ➡️
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        let selectedChipName = null;
+
+        function selectChip(name) {
+            selectedChipName = name;
+            render();
+        }
+
+        function getSelectedChipCls(name) {
+            if (Object.values(state.mapSlots).includes(name)) return 'used';
+            if (selectedChipName === name) return 'selected';
+            return '';
+        }
+
+        function assignSlot(slotKey) {
+            if (!selectedChipName) {
+                showModalAlert("Primero selecciona un concepto del banco de palabras arriba.");
+                return;
+            }
+            state.mapSlots[slotKey] = selectedChipName;
+            selectedChipName = null;
+            render();
+        }
+
+        function verifyConceptMap() {
+            if (state.mapSlots.slot1 === 'Rayos X' && state.mapSlots.slot2 === 'Ondas de Wi-Fi' && state.mapSlots.slot3 === 'Rayos Gamma') {
+                state.mapCorrect = true;
+                saveState();
+                render();
+            } else {
+                showModalAlert("Revisa tus asignaciones. Recuerda: Rayos X y Rayos Gamma son Ionizantes; las Ondas de Wi-Fi son No Ionizantes.");
+            }
+        }
+
+        function renderCasoPracticoScreen() {
+            document.getElementById('header-step-title').textContent = "Paso 5: Análisis de Caso Contextualizado";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        📖 Análisis de Caso: Mitos y Ciencia en Tuxpan
+                    </div>
+
+                    <div class="alert-banner">
+                        🏡 <strong>Escenario de la Comunidad:</strong> Tras las inundaciones por tormenta en Tuxpan, Nayarit, se instala temporalmente una torre de comunicación de emergencia y paneles solares para mantener la señal de radio y telefonía celular. Un vecino expresa preocupación por si la radiación de la antena puede enfermar a las familias cercanas.
+                    </div>
+
+                    <p class="reading-text">
+                        Aplica tus conocimientos sobre el espectro electromagnético y la energía fotónica para argumentar una respuesta fundamentada.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label" for="inp-case">
+                            En tus palabras, explica al vecino por qué la radiación de la torre de radio celular y el uso de energía fotovoltaica son seguros para la salud: *
+                        </label>
+                        <textarea id="inp-case" class="form-input" rows="4" placeholder="Escribe aquí tu explicación breve (mínimo 15 caracteres)..." oninput="state.caseText = this.value">${escapeHtml(state.caseText)}</textarea>
+                    </div>
+
+                    <button class="btn" onclick="checkCaseSubmit()">
+                        Enviar Explicación y Continuar 📝
+                    </button>
+
+                    <div id="case-feedback" style="display: ${state.caseText.trim().length >= 15 ? 'block' : 'none'}; margin-top: 14px;">
+                        <div class="key-concept">
+                            📘 <strong>Comparación Científica:</strong><br>
+                            Las ondas de radio de la antena son <strong>Radiación NO Ionizante</strong>. Sus fotones carecen de la energía mínima requerida para romper enlaces químicos o dañar el ADN. Asimismo, los paneles solares aprovechan el efecto fotoeléctrico de la luz sin emitir radiación nociva.
+                        </div>
+                        <button class="btn btn-secondary" onclick="setStep('QUIZ', 80)">
+                            Comenzar Evaluación Final (10 Preguntas) 📝
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkCaseSubmit() {
+            const val = (document.getElementById('inp-case').value || '').trim();
+            if (val.length < 15) {
+                showModalAlert("Por favor escribe una explicación un poco más amplia (mínimo 15 caracteres) para argumentar tu respuesta.");
+                return;
+            }
+            state.caseText = val;
+            saveState();
+            render();
+        }
+
+        function renderQuizScreen() {
+            document.getElementById('header-step-title').textContent = "Paso 6: Evaluación Formativa (10 Preguntas)";
+            const qIndex = state.quizCurrentIndex;
+            const qData = QUIZ_DATA[qIndex];
+            const currentSelected = state.quizAnswers[qIndex];
+
+            return `
+                <div class="card">
+                    <div class="card-title" style="justify-content: space-between;">
+                        <span>📝 Comprobación de Aprendizaje</span>
+                        <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted);">Pregunta ${qIndex + 1} de 10</span>
+                    </div>
+
+                    <!-- Grid de Navegación 1-10 -->
+                    <div class="quiz-nav-grid">
+                        ${QUIZ_DATA.map((_, i) => {
+                            const isAns = state.quizAnswers[i] !== null;
+                            const isCurr = i === qIndex;
+                            let cls = 'quiz-nav-item';
+                            if (isAns) cls += ' answered';
+                            if (isCurr) cls += ' active';
+                            return `<div class="${cls}" onclick="navQuizTo(${i})">${i + 1}</div>`;
+                        }).join('')}
+                    </div>
+
+                    <p style="font-weight: 700; color: var(--text-main); margin-bottom: 12px; font-size: 0.95rem;">
+                        ${qData.q}
+                    </p>
+
+                    <div>
+                        ${qData.options.map((opt, oIdx) => {
+                            let cls = 'option-btn';
+                            if (currentSelected === oIdx) cls += ' selected';
+                            if (state.quizSubmitted) {
+                                if (oIdx === qData.correct) cls += ' correct';
+                                else if (currentSelected === oIdx) cls += ' incorrect';
+                            }
+                            return `
+                                <button class="${cls}" onclick="selectQuizOption(${oIdx})" ${state.quizSubmitted ? 'disabled' : ''}>
+                                    ${opt}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    ${state.quizSubmitted ? `
+                        <div class="hint-box active info" style="margin-top: 10px;">
+                            💡 <strong>Explicación Examen:</strong> ${qData.exp}
+                        </div>
+                    ` : ''}
+
+                    <div style="display: flex; gap: 8px; margin-top: 16px;">
+                        <button class="btn btn-outline" style="flex: 1;" onclick="navQuizTo(${qIndex - 1})" ${qIndex === 0 ? 'disabled' : ''}>
+                            ⬅ Anterior
+                        </button>
+                        ${qIndex < 9 ? `
+                            <button class="btn" style="flex: 1;" onclick="navQuizTo(${qIndex + 1})">
+                                Siguiente ➡️
+                            </button>
+                        ` : `
+                            ${!state.quizSubmitted ? `
+                                <button class="btn btn-secondary" style="flex: 1;" onclick="submitQuiz()">
+                                    🏁 Entregar Examen
+                                </button>
+                            ` : `
+                                <button class="btn" style="flex: 1;" onclick="setStep('REFLECTION', 95)">
+                                    Ir a Reflexión Final ➡️
+                                </button>
+                            `}
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectQuizOption(oIdx) {
+            if (state.quizSubmitted) return;
+            state.quizAnswers[state.quizCurrentIndex] = oIdx;
+            saveState();
+            render();
+        }
+
+        function navQuizTo(idx) {
+            if (idx < 0 || idx >= 10) return;
+            state.quizCurrentIndex = idx;
+            render();
+        }
+
+        function submitQuiz() {
+            const unanswered = [];
+            state.quizAnswers.forEach((ans, i) => {
+                if (ans === null) unanswered.push(i + 1);
+            });
+
+            if (unanswered.length > 0) {
+                showModalAlert(`Faltan por responder las preguntas: ${unanswered.join(', ')}. Por favor respóndelas antes de entregar.`);
+                return;
+            }
+
+            let score = 0;
+            state.quizAnswers.forEach((ans, i) => {
+                if (ans === QUIZ_DATA[i].correct) score++;
+            });
+
+            state.quizScore = score;
+            state.quizSubmitted = true;
+            saveState();
+            render();
+        }
+
+        function renderReflectionScreen() {
+            document.getElementById('header-step-title').textContent = "Paso 7: Reflexión Metacognitiva";
+            return `
+                <div class="card">
+                    <div class="card-title">
+                        🧠 Reflexión Final del Aprendizaje
+                    </div>
+
+                    <p class="reading-text">
+                        Para concluir tu sesión de aprendizaje autónomo, redacta una breve reflexión en tus propias palabras sobre la utilidad de estos conceptos en tu vida cotidiana o comunidad.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label" for="inp-reflection">
+                            ¿Qué aprendizaje sobre el efecto fotoeléctrico, energía solar o radiación te pareció más relevante y por qué? *
+                        </label>
+                        <textarea id="inp-reflection" class="form-input" rows="4" placeholder="Escribe tu reflexión final (mínimo 30 caracteres)..." oninput="state.reflectionText = this.value">${escapeHtml(state.reflectionText)}</textarea>
+                    </div>
+
+                    <button class="btn" onclick="finishReflection()">
+                        🎓 GENERAR FICHA DE EVIDENCIA FINAL 🎓
+                    </button>
+                </div>
+            `;
+        }
+
+        function finishReflection() {
+            const text = (document.getElementById('inp-reflection').value || '').trim();
+            if (text.length < 30) {
+                showModalAlert("Por favor redacta una reflexión un poco más completa (al menos 30 caracteres) para completar tu evidencia.");
+                return;
+            }
+            state.reflectionText = text;
+            state.endTime = new Date().toISOString();
+            setStep('EVIDENCE', 100);
+        }
+
+        function renderEvidenceScreen() {
+            document.getElementById('header-step-title').textContent = "Ficha de Evidencia Completada";
+            const endDate = state.endTime ? new Date(state.endTime) : new Date();
+            const dateStr = endDate.toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            const timeStr = endDate.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+            const pctScore = Math.round((state.quizScore / 10) * 100);
+
+            return `
+                <div class="evidence-card">
+                    <div class="evidence-header">
+                        <div class="evidence-badge">✓ ACTIVIDAD COMPLETADA</div>
+                        <h2 style="font-size: 1.1rem; color: var(--primary); margin-top: 4px;">
+                            LA ENERGÍA EN LOS PROCESOS DE LA VIDA DIARIA
+                        </h2>
+                        <div style="font-size: 0.85rem; font-weight: 800; color: var(--secondary);">
+                            PROGRESIÓN 6 — PARTE 3 DE 3
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">
+                            Efecto Fotoeléctrico, Células Fotovoltaicas y Radiación
+                        </div>
+                    </div>
+
+                    <div class="evidence-row">
+                        <span class="evidence-label">ESTUDIANTE:</span>
+                        <span class="evidence-value">${escapeHtml(state.studentName)}</span>
+                    </div>
+
+                    <div class="evidence-row">
+                        <span class="evidence-label">GRUPO / TURNO:</span>
+                        <span class="evidence-value">${escapeHtml(state.studentGroup)}</span>
+                    </div>
+
+                    <div class="evidence-row">
+                        <span class="evidence-label">MODALIDAD:</span>
+                        <span class="evidence-value">Autónoma Offline (Tuxpan, Nay.)</span>
+                    </div>
+
+                    <div class="score-box-large">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                            Resultado de Comprobación
+                        </div>
+                        <div class="score-number">${state.quizScore} / 10</div>
+                        <div style="font-size: 0.9rem; font-weight: 800; color: ${pctScore >= 60 ? 'var(--success)' : 'var(--error)'};">
+                            ${pctScore}% de Aprovechamiento
+                        </div>
+                    </div>
+
+                    <div class="evidence-row">
+                        <span class="evidence-label">AVANCE TOTAL:</span>
+                        <span class="evidence-value" style="color: var(--success);">100% COMPLETADO</span>
+                    </div>
+
+                    <div class="evidence-row">
+                        <span class="evidence-label">FECHA Y HORA LOCAL:</span>
+                        <span class="evidence-value">${dateStr} - ${timeStr}</span>
+                    </div>
+
+                    <div style="margin-top: 10px;">
+                        <span class="evidence-label" style="display: block; font-size: 0.8rem;">🧠 SÍNTESIS DE REFLEXIÓN:</span>
+                        <div class="reflection-preview">
+                            "${escapeHtml(state.reflectionText)}"
+                        </div>
+                    </div>
+
+                    <div class="whatsapp-notice">
+                        📸 <strong>TOMA UNA CAPTURA DE PANTALLA DE ESTA VISTA</strong><br>
+                        Y envíala a tu profesor por WhatsApp como tu evidencia de trabajo.
+                    </div>
+                </div>
+
+                <button class="btn btn-outline" style="margin-top: 16px;" onclick="setStep('QUIZ', 100)">
+                    🔍 Revisar mis respuestas del examen
+                </button>
+            `;
+        }
+
+        /* Utility Anti-XSS */
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            render();
+        });
+    </script>
+</body>
+</html>
